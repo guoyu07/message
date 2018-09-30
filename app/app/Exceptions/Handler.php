@@ -54,6 +54,12 @@ class Handler extends ExceptionsHandler
      */
     protected function renderError($e)
     {
+        return [
+            'code'      => -1,   //错误代码 0：正确，-1：服务器错误，1：请求错误
+            'data'      => [], //返回数据体
+            'error'     => $e->getMessage(),//返回消息
+        ];
+
         $statusCode = 500;
         if ($e instanceof HttpException) {
             $statusCode = $e->getStatusCode();
