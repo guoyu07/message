@@ -328,6 +328,17 @@ class Ctx extends BasicCtx
         return true;
     }
 
+    public function checkLimit($from)
+    {
+        $key = $this->redisKey . 'msg:limit:' . $from . ':' . time();
+        if ($this->redis->incr($key) > 6) {
+            return true;
+        }
+        $this->redis->expire($key, 1);
+
+        return false;
+    }
+
     public function sendToGroup($from, $to, $msg)
     {
         $uids = $this->getGroupUsers($to);

@@ -103,6 +103,12 @@ class Index extends Controller
         }
 
         $from = $_SESSION['uid'];
+        //频率限制
+        if ($this->ctx->Im->checkLimit($from)) {
+            $_SESSION = [];
+            throw new \Exception('每秒最多发送5条消息');
+        }
+
         $msg = htmlspecialchars((string) $_POST['msg']);
         // $msg = $_GET['msg'];
         $to = (string) $_POST['to'];
@@ -120,6 +126,11 @@ class Index extends Controller
         }
 
         $from = $_SESSION['uid'];
+        //频率限制
+        if ($this->ctx->Im->checkLimit($from)) {
+            $_SESSION = [];
+            throw new \Exception('每秒最多发送5条消息');
+        }
         $to = (string) $_POST['to'];
         $msg = htmlspecialchars((string) $_POST['msg']);
         $this->ctx->Im->sendToUser($from, $to, $msg);
